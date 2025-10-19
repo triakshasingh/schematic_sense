@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignore Python virtual environments
+venv/
+../venv/
+*/venv/
+**/venv/
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Node + build ignores
+node_modules/
+.next/
+dist/
