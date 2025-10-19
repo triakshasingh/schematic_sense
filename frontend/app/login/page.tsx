@@ -14,7 +14,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post("https://schematic-sense-api.onrender.com/login", {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         email,
         password,
       });
@@ -41,14 +41,14 @@ export default function Login() {
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-2 mb-4 bg-transparent border-b border-gray-500 outline-none"
+          className="w-full p-2 mb-4 bg-transparent border-b border-gray-500 outline-none text-white placeholder-gray-400"
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-2 mb-6 bg-transparent border-b border-gray-500 outline-none"
+          className="w-full p-2 mb-6 bg-transparent border-b border-gray-500 outline-none text-white placeholder-gray-400"
           onChange={(e) => setPassword(e.target.value)}
           required
         />
@@ -61,12 +61,12 @@ export default function Login() {
         </button>
       </form>
 
-      {/* 👇 Sign-up link visible here */}
-      <p className="mt-4 text-sm text-gray-400">
+      {/* 👇 Sign up link here */}
+      <p className="mt-6 text-sm text-gray-400">
         Don’t have an account?{" "}
         <a
           href="/register"
-          className="text-indigo-400 hover:text-indigo-300 underline font-medium"
+          className="text-indigo-400 hover:text-indigo-300 underline font-medium transition-colors duration-300"
         >
           Sign up
         </a>
@@ -74,4 +74,5 @@ export default function Login() {
     </div>
   );
 }
+
 
