@@ -20,10 +20,8 @@ export default function Register() {
 
     try {
       // Make API call to backend /register route
-      const res = await axios.post("https://schematic-sense-api.onrender.com/register", {
-        email,
-        password,
-      });
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/register`, { email, password });
+
 
       if (res.status === 200) {
         alert("Registration successful! Please log in.");
