@@ -90,48 +90,46 @@ def login(user: User):
 
 
 # --- Circuit analysis route ---
-@app.post("/analyze-image")
-
-async def analyze_circuit(file: UploadFile = File(...)):
+@app.post("/analyze")
+async def analyze(file: UploadFile = File(...)):
     try:
-        # Read uploaded image
-        contents = await file.read()
-        image = Image.open(BytesIO(contents))
+        # Read the uploaded image
+        image_bytes = await file.read()
+        image_base64 = base64.b64encode(image_bytes).decode("utf-8")
 
-        # Convert to base64
-        buffered = BytesIO()
-        image.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+        print("API key loaded:", openai.api_key is not None)
 
-        # --- GPT Vision prompt ---
-        prompt = (
-            "You are an expert electronics engineer. Analyze this circuit diagram image. "
-            "1. List all visible components (resistors, capacitors, transistors, ICs, diodes, etc). "
-            "2. Explain the likely function or purpose of the circuit. "
-            "3. Identify potential wiring or design errors, missing connections, or faulty placements. "
-            "Provide your explanation clearly and logically."
-        )
-
-        # --- OpenAI call ---
-        openai.api_key = "OPENAI_API_KEY"  # Replace with your key
-        response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",
+        # Call GPT-4o for image analysis
+        response = openai.chat.completions.create(
+            model="gpt-4o",
             messages=[
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": prompt},
-                        {"type": "image_url", "image_url": f"data:image/png;base64,{img_str}"}
+                        {
+                            "type": "text",
+                            "text": (
+                                "Analyze this circuit schematic. "
+                                "Identify its components, describe their function, "
+                                "and mention any design issues or potential improvements."
+                            )
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": f"data:image/jpeg;base64,{image_base64}"
+                        }
                     ]
                 }
-            ]
+            ],
         )
 
-        analysis = response["choices"][0]["message"]["content"]
-        return {"analysis": analysis}
+        result = response.choices[0].message.content
+        return {"analysis": result}
 
     except Exception as e:
+        print("Error analyzing image:", e)
         raise HTTPException(status_code=500, detail=str(e))
+
 
 
 # --- Home route ---
