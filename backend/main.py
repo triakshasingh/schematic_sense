@@ -15,13 +15,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://schematic-sense.vercel.app",
-        "https://schematic-sense-8mla.vercel.app",
+        "https://schematic-sense-ppxp7e5iw-triakshasingh-1949s-projects.vercel.app",
         "http://localhost:3000",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 # --- Database setup ---
