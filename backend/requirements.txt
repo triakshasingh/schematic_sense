@@ -7,3 +7,5 @@ bcrypt
 passlib[bcrypt]
 python-jose[cryptography]
 fastapi[all]
+openai
+
