@@ -29,17 +29,27 @@ export default function Login() {
         alert("Login successful!");
         router.push("/dashboard");
       }
-    } catch (error: any) {
-      console.error("Login error:", error);
-      if (error.response) {
-        alert(error.response.data.detail || "Invalid credentials");
-      } else {
-        alert("Server unreachable. Please check your connection or backend.");
-      }
-    } finally {
-      setLoading(false);
+    } catch (error: unknown) {
+  console.error("Login error:", error);
+
+  if (axios.isAxiosError(error)) {
+    // Axios error type
+    if (error.response) {
+      alert(error.response.data.detail || "Invalid credentials");
+    } else {
+      alert("Server unreachable. Please check your connection or backend.");
     }
-  };
+  } else if (error instanceof Error) {
+    // Non-Axios error (network, etc.)
+    alert(error.message);
+  } else {
+    alert("An unknown error occurred.");
+  }
+} finally {
+  setLoading(false);
+}
+  }
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0f172a] text-white">
