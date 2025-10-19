@@ -1,7 +1,9 @@
 fastapi
 uvicorn
 python-dotenv
-openai
 pydantic
-aiofiles
-python-multipart
+sqlalchemy
+bcrypt
+passlib[bcrypt]
+python-jose[cryptography]
+fastapi[all]
