@@ -34,11 +34,15 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change this to ["https://schematic-sense.vercel.app"] for production
+    allow_origins=[
+        "https://schematic-sense.vercel.app",
+        "http://localhost:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # ------------------------------
 # OpenAI API setup
