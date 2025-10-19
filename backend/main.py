@@ -61,7 +61,6 @@ def register(user: User):
 
     return {"message": "User registered successfully"}
 
-# --- Login route ---
 @app.post("/login")
 def login(user: User):
     conn = sqlite3.connect("users.db")
@@ -76,12 +75,12 @@ def login(user: User):
 
     return {"message": "Login successful"}
 
-# --- Home route ---
+
 @app.get("/")
 def home():
     return {"message": "SchematicSense backend running successfully!"}
 
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=10000)
-
