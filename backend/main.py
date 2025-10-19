@@ -112,7 +112,7 @@ async def analyze_circuit(file: UploadFile = File(...)):
         )
 
         # --- OpenAI call ---
-        openai.api_key = "YOUR_OPENAI_API_KEY"  # Replace with your key
+        openai.api_key = "OPENAI_API_KEY"  # Replace with your key
         response = openai.ChatCompletion.create(
             model="gpt-4o-mini",
             messages=[
