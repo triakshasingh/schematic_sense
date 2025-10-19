@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -12,44 +13,39 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!email || !password) {
       alert("Please fill in all fields.");
       return;
     }
 
     setLoading(true);
-
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/login`,
+        { email, password }
+      );
 
       if (res.status === 200) {
         alert("Login successful!");
         router.push("/dashboard");
       }
     } catch (error: unknown) {
-  console.error("Login error:", error);
+      console.error("Login error:", error);
 
-  if (axios.isAxiosError(error)) {
-    // Axios error type
-    if (error.response) {
-      alert(error.response.data.detail || "Invalid credentials");
-    } else {
-      alert("Server unreachable. Please check your connection or backend.");
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          alert(error.response.data.detail || "Invalid credentials");
+        } else {
+          alert("Server unreachable. Please check your internet or backend.");
+        }
+      } else {
+        alert("Unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false);
     }
-  } else if (error instanceof Error) {
-    // Non-Axios error (network, etc.)
-    alert(error.message);
-  } else {
-    alert("An unknown error occurred.");
-  }
-} finally {
-  setLoading(false);
-}
-  }
-
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0f172a] text-white">
@@ -67,6 +63,7 @@ export default function Login() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <input
           type="password"
           placeholder="Password"
@@ -81,11 +78,11 @@ export default function Login() {
           disabled={loading}
           className="w-full py-2 bg-indigo-600 rounded-lg hover:bg-indigo-500 transition-all disabled:opacity-50"
         >
-          {loading ? "Logging in..." : "Log In"}
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
 
-      <p className="mt-6 text-sm text-gray-400">
+      <p className="mt-4 text-sm text-gray-400">
         Don’t have an account?{" "}
         <Link
           href="/register"
@@ -97,5 +94,3 @@ export default function Login() {
     </div>
   );
 }
-
-
