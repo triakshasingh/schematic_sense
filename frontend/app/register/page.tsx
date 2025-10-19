@@ -20,7 +20,11 @@ export default function Register() {
 
     try {
       // Make API call to backend /register route
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/register`, { email, password });
+      const res = await axios.post(
+  `${process.env.NEXT_PUBLIC_API_URL}/register`,
+  { email, password }
+);
+
 
 
       if (res.status === 200) {
