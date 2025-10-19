@@ -90,7 +90,8 @@ def login(user: User):
 
 
 # --- Circuit analysis route ---
-@app.post("/analyze")
+@app.post("/analyze-image")
+
 async def analyze_circuit(file: UploadFile = File(...)):
     try:
         # Read uploaded image
