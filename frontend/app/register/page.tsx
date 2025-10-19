@@ -27,6 +27,7 @@ export default function Register() {
 
 
 
+
       if (res.status === 200) {
         alert("Registration successful! Please log in.");
         router.push("/login");
