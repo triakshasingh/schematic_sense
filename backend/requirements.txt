@@ -9,4 +9,5 @@ python-jose[cryptography]
 fastapi[all]
 openai
 python-multipart
+Pillow
 

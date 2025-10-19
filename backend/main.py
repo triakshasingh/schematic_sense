@@ -1,10 +1,12 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Form
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import openai
 import base64
 import sqlite3
 import bcrypt
+from io import BytesIO
+from PIL import Image
 
 app = FastAPI()
 
@@ -41,6 +43,7 @@ class User(BaseModel):
     email: str
     password: str
 
+
 # --- Register route ---
 @app.post("/register")
 def register(user: User):
@@ -61,6 +64,8 @@ def register(user: User):
 
     return {"message": "User registered successfully"}
 
+
+# --- Login route ---
 @app.post("/login")
 def login(user: User):
     conn = sqlite3.connect("users.db")
@@ -76,11 +81,57 @@ def login(user: User):
     return {"message": "Login successful"}
 
 
+# --- Circuit analysis route ---
+@app.post("/analyze")
+async def analyze_circuit(file: UploadFile = File(...)):
+    try:
+        # Read uploaded image
+        contents = await file.read()
+        image = Image.open(BytesIO(contents))
+
+        # Convert to base64
+        buffered = BytesIO()
+        image.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+        # --- GPT Vision prompt ---
+        prompt = (
+            "You are an expert electronics engineer. Analyze this circuit diagram image. "
+            "1. List all visible components (resistors, capacitors, transistors, ICs, diodes, etc). "
+            "2. Explain the likely function or purpose of the circuit. "
+            "3. Identify potential wiring or design errors, missing connections, or faulty placements. "
+            "Provide your explanation clearly and logically."
+        )
+
+        # --- OpenAI call ---
+        openai.api_key = "YOUR_OPENAI_API_KEY"  # Replace with your key
+        response = openai.ChatCompletion.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {"type": "image_url", "image_url": f"data:image/png;base64,{img_str}"}
+                    ]
+                }
+            ]
+        )
+
+        analysis = response["choices"][0]["message"]["content"]
+        return {"analysis": analysis}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# --- Home route ---
 @app.get("/")
 def home():
     return {"message": "SchematicSense backend running successfully!"}
 
 
+# --- Run the server ---
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=10000)
