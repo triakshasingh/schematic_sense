@@ -7,8 +7,13 @@ import sqlite3
 import bcrypt
 from io import BytesIO
 from PIL import Image
+import os 
+from dotenv import load_dotenv
+load_dotenv()
+
 
 app = FastAPI()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # --- CORS ---
 app.add_middleware(
