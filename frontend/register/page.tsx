@@ -3,29 +3,28 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-export default function Login() {
+export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await axios.post("https://schematic-sense-api.onrender.com/login", {
+      const res = await axios.post("https://schematic-sense-api.onrender.com/register", {
         email,
         password,
       });
-
       if (res.status === 200) {
-        alert("Login successful!");
-        router.push("/dashboard");
+        alert("Registration successful! Please log in.");
+        router.push("/login");
       }
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        alert("Invalid credentials. Please try again.");
+      if (error.response && error.response.status === 400) {
+        alert("User already exists. Try logging in.");
       } else {
         alert("Something went wrong. Please try again later.");
       }
@@ -37,9 +36,9 @@ export default function Login() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0f172a] text-white">
-      <h1 className="text-4xl font-bold mb-6">Sign In</h1>
+      <h1 className="text-4xl font-bold mb-6">Create Account</h1>
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleRegister}
         className="w-80 bg-white/10 p-6 rounded-2xl backdrop-blur-md shadow-xl"
       >
         <input
@@ -61,16 +60,16 @@ export default function Login() {
           disabled={loading}
           className="w-full py-2 bg-indigo-600 rounded-lg hover:bg-indigo-500 transition-all disabled:opacity-50"
         >
-          {loading ? "Logging in..." : "Log In"}
+          {loading ? "Registering..." : "Register"}
         </button>
       </form>
       <p className="mt-4 text-sm text-gray-400">
-        Don’t have an account?{" "}
+        Already have an account?{" "}
         <a
-          href="/register"
+          href="/login"
           className="text-indigo-400 hover:text-indigo-300 underline"
         >
-          Sign up
+          Log in
         </a>
       </p>
     </div>
