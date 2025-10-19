@@ -18,17 +18,12 @@ export default function Login() {
         email,
         password,
       });
-
       if (res.status === 200) {
         alert("Login successful!");
         router.push("/dashboard");
       }
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        alert("Invalid credentials. Please try again.");
-      } else {
-        alert("Something went wrong. Please try again later.");
-      }
+      alert("Invalid credentials or server issue. Try again.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -38,6 +33,7 @@ export default function Login() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0f172a] text-white">
       <h1 className="text-4xl font-bold mb-6">Sign In</h1>
+
       <form
         onSubmit={handleLogin}
         className="w-80 bg-white/10 p-6 rounded-2xl backdrop-blur-md shadow-xl"
@@ -64,11 +60,13 @@ export default function Login() {
           {loading ? "Logging in..." : "Log In"}
         </button>
       </form>
+
+      {/* 👇 Sign-up link visible here */}
       <p className="mt-4 text-sm text-gray-400">
         Don’t have an account?{" "}
         <a
           href="/register"
-          className="text-indigo-400 hover:text-indigo-300 underline"
+          className="text-indigo-400 hover:text-indigo-300 underline font-medium"
         >
           Sign up
         </a>
@@ -76,3 +74,4 @@ export default function Login() {
     </div>
   );
 }
+
