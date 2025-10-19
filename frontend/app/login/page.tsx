@@ -62,17 +62,15 @@ export default function Login() {
       </form>
 
       {/* 👇 Sign up link here */}
-      <p className="mt-6 text-sm text-gray-400">
-        Don’t have an account?{" "}
-        <a
-          href="/register"
-          className="text-indigo-400 hover:text-indigo-300 underline font-medium transition-colors duration-300"
-        >
-          Sign up
-        </a>
-      </p>
-    </div>
-  );
-}
+<p className="mt-6 text-sm text-gray-400">
+  Don’t have an account?{" "}
+  <Link 
+    href="/register" 
+    className="text-indigo-400 hover:text-indigo-300 underline font-medium"
+  >
+    Sign Up
+  </Link>
+</p>
+
 
 
